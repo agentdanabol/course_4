@@ -1,0 +1,30 @@
+#cloud-config
+datasource:
+  Ec2:
+    strict_id: false
+ssh_pwauth: no
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDB2BwPw5rBLFgiwb241OPrWdSFWCpFV2cug47ZC43rB9He/YV8fDRUdJ4wIlkJSSmMBH0FiY2XNpyuU68dq3Ta5TqaEiRu/DhpDqmALwLmpkjmsnkt0rGcbXi+KwsSDVv8vj7ckcTRsRPfvMxu22L89WrWtoLuFIZtrKSxvLeNHft5qM3ADqf5gJ+Qd0Kvo0ulL7SaTlzs5fO3DocUJGatdxQapIU2qiPZrG8+yXT+w5kXdQPshVbxXtVdmbjt9XEo0j1YmwFOSHRU7P/SNxuabK2mypkHPJdNuL9Jx+Lrd9a356aEMgzIiYGRSc3nhljSXmxI35bNtDCWAZ/iTxSLqGrDzcRPxenvk151dkBoDVPO/x2ZN+l0UW7bEpJzXRPcSymiW9VsolEfKlDoXridLy2tmJJXvi8nxB0Uz7lIrBwzqbOrGDko0/LEwm1qc+hmla9mAzWY/CByhRgSSPkQVH+nAuxWWSllPaawlZfkJNBamf47Og7iRRic1TrkmFk= danilsheiko@MacBook-Pro-Danil.local
+package_update: false
+package_upgrade: false
+packages:
+  - nginx
+runcmd: 
+  - |
+    sudo tee -a /var/www/html/index.nginx-debian.html > /dev/null <<'EOF'
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Terraform provisioned</title>
+    </head>
+    <body>
+        <h1>Endpoints</h1>    
+        <p>We have just provisioned Yandex Cloud VM. You can connect to it via: <br><b>${instance_connect_string}</b></p>
+        <p>CPU: <br><b>${instance_cpu}</b></p>
+        <p>Memory: <br><b>${instance_memory}</b></p>
+        <p>We have just provisioned YDB. You can connect to it via: <br><b>Fake ydb address</b></p>
+        <p>We have just provisioned Yandex Object Storage. You can find it here: <br><b>Fake yandex bucket address<</b></p>        
+    </body>
+    </html>
+    EOF
