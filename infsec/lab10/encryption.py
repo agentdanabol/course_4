@@ -12,7 +12,7 @@ def unpad_pkcs7(data):
 def xor_bytes(a, b):
     return bytes(i ^ j for i, j in zip(a, b))
 
-def encrypt_cbc(key, iv, plaintext):
+def encrypt_ecb(key, iv, plaintext):
     cipher = AES.new(key, AES.MODE_ECB)
     padded_text = pad_pkcs7(plaintext)
     encrypted_blocks = []
@@ -27,7 +27,7 @@ def encrypt_cbc(key, iv, plaintext):
     
     return iv + b''.join(encrypted_blocks)
 
-def decrypt_cbc(key, ciphertext):
+def decrypt_ecb(key, ciphertext):
     iv = ciphertext[:16]
     cipher = AES.new(key, AES.MODE_ECB)
     encrypted_blocks = [ciphertext[i:i+16] for i in range(16, len(ciphertext), 16)]
@@ -55,11 +55,11 @@ if __name__ == "__main__":
     iv = get_random_bytes(16)    # 16-byte IV
     plaintext = b"This is a secret message that needs encryption."
     
-    encrypted = encrypt_cbc(key, iv, plaintext)
+    encrypted = encrypt_ecb(key, iv, plaintext)
     save_to_file("infsec/lab10/encrypted.bin", encrypted)
     
     loaded_encrypted = load_from_file("infsec/lab10/encrypted.bin")
-    decrypted = decrypt_cbc(key, loaded_encrypted)
+    decrypted = decrypt_ecb(key, loaded_encrypted)
     
     print("Original:", plaintext)
     print("Decrypted:", decrypted)
